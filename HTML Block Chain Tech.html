@@ -1,199 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Technical Analysis</title>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        header {
-            background-color: #00274d;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            position: relative;
-        }
-        header img {
-            position: absolute;
-            top: 50%;
-            left: 20px;
-            transform: translateY(-50%);
-            height: 50px;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-        }
-        .input-bar {
-            display: flex;
-            margin-bottom: 30px;
-        }
-        .input-bar input {
-            flex: 1;
-            padding: 15px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            margin-right: 10px;
-        }
-        .input-bar button {
-            padding: 15px 25px;
-            font-size: 16px;
-            background-color: #00274d;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .input-bar button:hover {
-            background-color: #003366;
-        }
-        .graph {
-            margin: 20px 0;
-            text-align: center;
-        }
-        canvas {
-            max-width: 100%;
-            height: auto;
-        }
-        .conclusion {
-            padding: 20px;
-            background-color: #e3f2fd;
-            border-left: 6px solid #00274d;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        .conclusion h3 {
-            margin-top: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlockChain</title>
+  <link href="styles.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <header>
-        <img src="image.png" alt="Blockchain at Emory Logo">
-        <h1>Crypto Technical Analysis</h1>
-    </header>
 
-    <div class="container">
-        <!-- Input Bar -->
-        <div class="input-bar">
+<body class="document-body">
+  <!-- Main Page Deck -->
+  <gwd-pagedeck class="gwd-page-container" id="pagedeck">
+    <!-- Page 1: Input Page -->
+    <gwd-page id="page1" class="gwd-page-wrapper">
+      <div class="gwd-page-content">
+        <header>
+          <img src="image.png" alt="Blockchain Logo">
+          <h1>Crypto Technical Analysis</h1>
+        </header>
+        <div class="container">
+          <div class="input-bar">
             <input type="text" id="cryptoAddress" placeholder="Enter cryptocurrency address...">
-            <button onclick="fetchData()">Analyze</button>
+            <button onclick="goToGraphs()">Analyze</button>
+          </div>
         </div>
+      </div>
+    </gwd-page>
 
-        <!-- Graphs Section -->
-        <div id="graphs">
-            <div class="graph">
-                <h3>RSI</h3>
-                <canvas id="rsiChart"></canvas>
-            </div>
-            <div class="graph">
-                <h3>ATR</h3>
-                <canvas id="atrChart"></canvas>
-            </div>
-            <div class="graph">
-                <h3>ADX</h3>
-                <canvas id="adxChart"></canvas>
-            </div>
-            <div class="graph">
-                <h3>SMA</h3>
-                <canvas id="smaChart"></canvas>
-            </div>
-            <div class="graph">
-                <h3>MFI</h3>
-                <canvas id="mfiChart"></canvas>
-            </div>
+    <!-- Page 2: Graphs Page -->
+    <gwd-page id="page2" class="gwd-page-wrapper">
+      <div class="gwd-page-content">
+        <header>
+          <img src="image.png" alt="Blockchain Logo">
+          <h1>Crypto Technical Analysis</h1>
+        </header>
+        <div class="container">
+          <h3>Graphs</h3>
+          <div class="graph">
+            <canvas id="rsiChart"></canvas>
+          </div>
+          <div class="graph">
+            <canvas id="atrChart"></canvas>
+          </div>
+          <div class="graph">
+            <canvas id="adxChart"></canvas>
+          </div>
         </div>
+      </div>
+    </gwd-page>
+  </gwd-pagedeck>
 
-        <!-- Conclusion Section -->
-        <div id="conclusion" class="conclusion">
-            <h3>Conclusion</h3>
-            <p id="conclusionText">Enter a cryptocurrency address and click "Analyze" to see the analysis.</p>
-        </div>
-    </div>
+  <script>
+    // Switch to the second page when the button is clicked
+    function goToGraphs() {
+      const address = document.getElementById('cryptoAddress').value;
+      if (!address) {
+        alert('Please enter a cryptocurrency address!');
+        return;
+      }
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        function fetchData() {
-            const address = document.getElementById('cryptoAddress').value;
-            if (!address) {
-                alert('Please enter a cryptocurrency address!');
-                return;
+      // Transition to the second page
+      const pageDeck = document.getElementById('pagedeck');
+      pageDeck.goToPage('page2');
+
+      // Render graphs
+      renderGraphs();
+    }
+
+    function renderGraphs() {
+      const labels = Array.from({ length: 20 }, (_, i) => `Point ${i + 1}`);
+      const data = Array.from({ length: 20 }, () => Math.random() * 100);
+
+      const configs = [
+        { id: 'rsiChart', label: 'RSI' },
+        { id: 'atrChart', label: 'ATR' },
+        { id: 'adxChart', label: 'ADX' },
+      ];
+
+      configs.forEach(config => {
+        const ctx = document.getElementById(config.id).getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: config.label,
+              data,
+              borderColor: 'rgba(0, 123, 255, 1)',
+              backgroundColor: 'rgba(0, 123, 255, 0.2)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top'
+              }
             }
-
-            // Placeholder for backend data fetching
-            console.log('Fetching data for address:', address);
-            
-            // Simulate updating graphs and conclusion
-            updateGraphs();
-            updateConclusion();
-        }
-
-        function updateGraphs() {
-            // Placeholder data for graphs
-            const labels = Array.from({ length: 20 }, (_, i) => `Point ${i + 1}`);
-            const data = Array.from({ length: 20 }, () => Math.random() * 100);
-
-            const configs = [
-                { id: 'rsiChart', label: 'RSI' },
-                { id: 'atrChart', label: 'ATR' },
-                { id: 'adxChart', label: 'ADX' },
-                { id: 'smaChart', label: 'SMA' },
-                { id: 'mfiChart', label: 'MFI' },
-            ];
-
-            configs.forEach(config => {
-                const ctx = document.getElementById(config.id).getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels,
-                        datasets: [{
-                            label: config.label,
-                            data,
-                            borderColor: 'rgba(0, 123, 255, 1)',
-                            backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            }
-                        }
-                    }
-                });
-            });
-        }
-
-        function updateConclusion() {
-            // Placeholder conclusion text
-            const conclusionText = `Based on the analysis, the cryptocurrency shows a mix of indicators:
-            - RSI indicates neutral trend.
-            - ATR suggests moderate volatility.
-            - ADX highlights a weak trend.
-            - SMA and MFI show stable movement.`;
-            document.getElementById('conclusionText').textContent = conclusionText;
-        }
-    </script>
+          }
+        });
+      });
+    }
+  </script>
 </body>
+
 </html>
